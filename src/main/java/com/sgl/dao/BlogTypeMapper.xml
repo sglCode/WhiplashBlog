@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sgl.dao.BlogTypeMapper">
+
+
+    <select id="countList" resultType="com.sgl.pojo.BlogType">
+        SELECT * from blogtype
+    </select>
+    <select id="findById" parameterType="int" resultType="com.sgl.pojo.BlogType">
+        SELECT * from blogtype where id=#{id}
+    </select>
+    <select id="getTotal" resultType="long">
+        SELECT count(*) from blogtype
+    </select>
+    <insert id="add" parameterType="com.sgl.pojo.BlogType">
+        insert INTO blogtype  VALUES (null,#{typeName},#{orderNo})
+    </insert>
+    <delete id="delete" parameterType="int">
+        DELETE from blogtype where orderNo=#{orderNo}
+    </delete>
+    <update id="update" parameterType="com.sgl.pojo.BlogType">
+        UPDATE blogtype set typeName=#{typeName} where id=#{id}
+    </update>
+
+
+</mapper>

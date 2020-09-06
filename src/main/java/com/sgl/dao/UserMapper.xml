@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sgl.dao.UserMapper">
+    <insert id="addUser" parameterType="com.sgl.pojo.User">
+        insert INTO USER (id,username,password,nickname,sign) VALUES (null,#{username},#{password},#{nickname},#{sign})
+    </insert>
+    <delete id="delUser" parameterType="int">
+        DELETE from user where id=#{id}
+    </delete>
+    <update id="updateUser" parameterType="com.sgl.pojo.User">
+        UPDATE user
+        <set>
+            <if test="nickname!=null">nickname=#{nickname},</if>
+            <if test="sign!=null">sign=#{sign},</if>
+        </set>
+        where id=#{id}
+    </update>
+    <select id="findUser" parameterType="Integer" resultType="com.sgl.pojo.User">
+        SELECT * from user where id=#{id}
+    </select>
+    <select id="findUserByUsername" parameterType="String" resultType="com.sgl.pojo.User">
+        SELECT * from user where username=#{username}
+    </select>
+
+    <select id="userList"  resultType="com.sgl.pojo.User">
+        SELECT * from user
+    </select>
+
+
+</mapper>

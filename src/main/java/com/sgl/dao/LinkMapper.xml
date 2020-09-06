@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sgl.dao.LinkMapper">
+
+    <select id="countList" resultType="com.sgl.pojo.Link">
+        SELECT * from link
+    </select>
+    <select id="findById" parameterType="int" resultType="com.sgl.pojo.Link">
+        SELECT * from link where id=#{id}
+    </select>
+    <select id="getTotal" resultType="long">
+        SELECT count(*) from link
+    </select>
+    <insert id="add" parameterType="com.sgl.pojo.Link">
+        insert INTO link VALUES (null,#{linkName},#{linkUrl},null)
+    </insert>
+    <delete id="delete" parameterType="int">
+        DELETE from link where id=#{id}
+    </delete>
+    <update id="update" parameterType="com.sgl.pojo.Link">
+        UPDATE link
+        <set>
+            <if test="linkName=null and linkName !=''">linkName=#{linkName},</if>
+            <if test="linkUrl!=null and linkUrl !=''">linkUrl=#{linkUrl},</if>
+        </set>
+        where id=#{id}
+    </update>
+
+</mapper>

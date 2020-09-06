@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sgl.dao.BlogMapper">
+    <resultMap id="BlogResult" type="com.sgl.pojo.Blog">
+        <result column="id" property="id"/>
+        <result column="title" property="title"></result>
+        <result column="releaseDate" property="releaseDate"></result>
+        <result column="clickHit" property="clickHit"></result>
+        <result column="replyHit" property="replyHit"></result>
+        <result column="content" property="content"></result>
+        <result column="state" property="state"></result>
+        <association property="blogType" column="typeId" javaType="com.sgl.pojo.BlogType" select="com.sgl.dao.BlogTypeMapper.findById"/>
+    </resultMap>
+
+    <select id="findBlogByTypeId" resultMap="BlogResult">
+        SELECT * from blog where typeId &lt;= #{1} and typeId &gt;=#{0} order by releaseDate desc limit #{2}
+    </select>
+
+    <select id="find" resultMap="BlogResult">
+        SELECT * FROM blog
+        <where>
+            <if test="title!=null">
+                AND title=#{title}
+            </if>
+        </where>
+    </select>
+
+    <select id="findNewestBlog" resultMap="BlogResult">
+        SELECT * FROM blog WHERE releaseDate=(SELECT MAX(releaseDate) FROM blog)
+    </select>
+
+    <select id="countList" resultMap="BlogResult">
+        SELECT * from blog order by releaseDate desc
+    </select>
+    <select id="findById" parameterType="int" resultMap="BlogResult">
+        SELECT * from blog where id=#{id}
+    </select>
+    <select id="getTotal" resultType="long">
+        SELECT count(*) from blog
+    </select>
+    <select id="getTotalHit" resultType="long">
+        SELECT sum(clickHit) from blog
+    </select>
+
+    <select id="getBlogByClickHit" resultType="com.sgl.pojo.Blog">
+        SELECT * from blog order by clickHit desc limit 3;
+    </select>
+
+    <select id="getBlogByReply" resultType="com.sgl.pojo.Blog">
+        SELECT * from blog order by replyHit desc limit 3;
+    </select>
+
+    <select id="getBlogBySearch" resultType="com.sgl.pojo.Blog">
+        SELECT * from blog
+        <where>
+            <if test="_parameter != null">
+                title LIKE concat(concat('%',#{keyword}),'%')
+            </if>
+        </where>
+    </select>
+
+    <insert id="add" parameterType="com.sgl.pojo.Blog">
+        insert INTO blog VALUES (null,#{title},now(),0,0,#{content},#{blogType.id},#{state})
+    </insert>
+    <delete id="delete" parameterType="int">
+        DELETE from blog where id=#{id}
+    </delete>
+    <update id="update" parameterType="com.sgl.pojo.Blog">
+        UPDATE blog
+        <set>
+            <if test="title!=null and title !=''">title=#{title},</if>
+            <if test="content!=null and content !=''">content=#{content},</if>
+            <if test="state!=null and state!=''">state=#{state},</if>
+        </set>
+
+
+        where id=#{id}
+    </update>
+
+</mapper>
